@@ -68,6 +68,10 @@
 #include <SDL_vulkan.h>
 #endif // HAVE_VULKAN
 
+#ifdef __SWITCH__
+#define SDL2_STATIC_LIBRARY
+#endif
+
 // TYPES -------------------------------------------------------------------
 
 // PUBLIC FUNCTION PROTOTYPES ----------------------------------------------
