@@ -1,6 +1,6 @@
 cmake_minimum_required( VERSION 3.1.0 )
 
-if( NSWITCH )
+if( NINTENDO_SWITCH )
 	set(APP_NAME "GZDoom Launcher")
 	set(APP_AUTHOR "fgsfds")
 	set(APP_VERSION "${SWITCH_APP_VERSION}")

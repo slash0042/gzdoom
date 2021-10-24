@@ -178,6 +178,19 @@ else()
 	# Non-Windows version also needs SDL except native OS X backend
 	if( NOT APPLE OR NOT OSX_COCOA_BACKEND )
 		find_package( SDL2 REQUIRED )
+		if ( NINTENDO_SWITCH )
+			# I don't know what the fuck happened to the dka64 cmake environment (or gzdoom's FindSDL2 script),
+			# but the above line will no longer define SDL2_INCLUDE_DIR or SDL2_LIBRARY
+			# and it happened to a couple other libraries as well; so we define them by hand
+			if( NOT DEFINED SDL2_LIBRARY AND NOT DEFINED SDL2_INCLUDE_DIR )
+				set( SDL2_INCLUDE_DIR "${DEVKITPRO}/portlibs/switch/include/SDL2" )
+				set( SDL2_LIBRARY "${DEVKITPRO}/portlibs/switch/lib/libSDL2.a" )
+			endif()
+			if( NOT DEFINED ZMUSIC_LIBRARIES AND NOT DEFINED ZMUSIC_INCLUDE_DIR )
+				set( ZMUSIC_INCLUDE_DIR "${DEVKITPRO}/portlibs/switch/include" )
+				set( ZMUSIC_LIBRARIES "${DEVKITPRO}/portlibs/switch/lib/libzmusic.a" )
+			endif()
+		endif()
 		include_directories( "${SDL2_INCLUDE_DIR}" )
 		set( ZDOOM_LIBS ${ZDOOM_LIBS} "${SDL2_LIBRARY}" )
 	endif()
@@ -509,7 +522,7 @@ elseif( APPLE )
 
 	set_source_files_properties( posix/osx/zdoom.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources )
 	set_source_files_properties( common/platform/posix/osx/iwadpicker_cocoa.mm PROPERTIES COMPILE_FLAGS -fobjc-exceptions )
-elseif( NSWITCH )
+elseif( NINTENDO_SWITCH )
 	set( SYSTEM_SOURCES_DIR common/platform/posix common/platform/posix/sdl common/platform/posix/nx )
 	set( SYSTEM_SOURCES ${PLAT_POSIX_SOURCES} ${PLAT_SDL_SOURCES} ${PLAT_NX_SOURCES} )
 	set( OTHER_SYSTEM_SOURCES ${PLAT_WIN32_SOURCES} ${PLAT_OSX_SOURCES} ${PLAT_COCOA_SOURCES} )
@@ -1272,7 +1285,7 @@ if( UNIX )
 	endif()
 endif()
 
-if( NSWITCH )
+if( NINTENDO_SWITCH )
 	list( REMOVE_ITEM ZDOOM_LIBS dl )
 	set( ZDOOM_LIBS ${ZDOOM_LIBS} EGL glapi drm_nouveau nx )
 	set( ZMUSIC_LIBRARIES ${ZMUSIC_LIBRARIES} fluidsynth mpg123 sndfile z )
@@ -1390,7 +1403,7 @@ if( NOT WIN32 AND NOT APPLE )
 		COMMAND /bin/sh -c ${CMAKE_CURRENT_BINARY_DIR}/link-make )
 endif()
 
-if( NSWITCH )
+if( NINTENDO_SWITCH )
 	add_custom_command( TARGET zdoom POST_BUILD
 		COMMAND nacptool --create "${CMAKE_PROJECT_NAME}" "${SWITCH_APP_VERSION}" \"\" "gzdoom.nacp"
 		COMMAND aarch64-none-elf-strip -o ${CMAKE_BINARY_DIR}/gzdoom_stripped ${CMAKE_BINARY_DIR}/gzdoom

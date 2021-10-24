@@ -10,6 +10,6 @@
 # ifdef GIT_DESCRIPTION
 #  define VERSION GIT_DESCRIPTION
 # else
-#  define VERSION "nx4.6-pre"
+#  define VERSION "nx4.7.1-1"
 # endif
 #endif

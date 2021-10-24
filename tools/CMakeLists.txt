@@ -4,7 +4,7 @@ add_subdirectory( re2c )
 add_subdirectory( lemon )
 add_subdirectory( zipdir )
 
-if( NSWITCH )
+if( NINTENDO_SWITCH )
 	add_subdirectory( nxlauncher )
 endif()
 

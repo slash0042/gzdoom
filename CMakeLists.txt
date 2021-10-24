@@ -15,12 +15,12 @@ if( COMMAND cmake_policy )
 	endif()
 endif()
 
-if( NSWITCH )
+if( NINTENDO_SWITCH )
 	# our gcc11 complains about the use of alloca, stricmp, etc without including the appropriate headers
 	# unless we just do this
 	set( CMAKE_CXX_EXTENSIONS ON )
 	# used in both gzdoom and launcher
-	set( SWITCH_APP_VERSION "nx4.6pre-7" )
+	set( SWITCH_APP_VERSION "nx4.7.1-1" )
 endif()
 
 list( APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
@@ -301,7 +301,7 @@ else()
 			# If we're compiling with a custom GCC on the Mac (which we know since g++-4.2 doesn't support C++11) statically link libgcc.
 			set( ALL_C_FLAGS "-static-libgcc" )
 		endif()
-	elseif( NSWITCH )
+	elseif( NINTENDO_SWITCH )
 		set( ALL_C_FLAGS "${ALL_C_FLAGS} -D__SWITCH__ -I$ENV{PORTLIBS_PREFIX}/include -I$ENV{DEVKITPRO}/libnx/include" )
 		set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-class-memaccess" )
 	elseif( NOT MINGW )
